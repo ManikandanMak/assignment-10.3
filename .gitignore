@@ -1,6 +1,16 @@
+create table if not exists temperature_date(date string,
+    > zip int,
+    > temp int)
+    > row format delimited
+    > fields terminated by ',';
+    
+load data local inpath '/home/acadgild/temp' into table temperature_date;
+
+select * from temperature_date;
 
 select date,temp from temperature_date where zip > 300000 and zip < 399999;
 
 select FROM_UNIXTIME(UNIX_TIMESTAMP(date,'dd-mm-yyyy'),'yyyy'),MAX(temp) from temperature_date group by FROM_UNIXTIME(UNIX_TIMESTAMP(date,'dd-mm-yyyy'),'yyyy');
 
-select FROM_UNIXTIME(UNIX_TIMESTAMP(date,'dd-mm-yyyy'),'yyyy') as year, COUNT(FROM_UNIXTIME(UNIX_TIMESTAMP(date,'dd-mm-yyyy'),'yyyy')) as count, MAX(temp) from 
+select FROM_UNIXTIME(UNIX_TIMESTAMP(date,'dd-mm-yyyy'),'yyyy') as year, COUNT(FROM_UNIXTIME(UNIX_TIMESTAMP(date,'dd-mm-yyyy'),'yyyy')) as count, MAX(temp) from temperature_date group by FROM_UNIXTIME(UNIX_TIMESTAMP(date,'dd-mm-yyyy'),'yyyy') having COUNT(FROM_UNIXTIME(UNIX_TIMESTAMP(date,'dd-mm-yyyy'),'yyyy')) >=2;
+
